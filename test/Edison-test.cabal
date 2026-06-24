@@ -30,7 +30,9 @@ test-suite testSuite
      QuickCheck >= 2.8.2 && < 3,
      HUnit >= 1.1,
      EdisonAPI,
-     EdisonCore
+     EdisonCore,
+     g2
+  ghc-options:      -fplugin=G2.Plugin
   Default-Language: Haskell2010
   Default-Extensions:
      MultiParamTypeClasses

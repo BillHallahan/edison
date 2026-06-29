@@ -236,9 +236,9 @@ prop_reverseOnto :: SeqTest Int seq => seq Int -> seq Int -> seq Int -> Bool
 prop_reverseOnto seq xs ys =
     reverseOnto xs ys === append (reverse xs) ys
 
--- {-# ANN prop_map (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+-- {-# ANN prop_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
 --    #-}
-{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_map :: (Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_map = prop_map
@@ -251,7 +251,7 @@ prop_map f seq xs =
                 &&
             toList succ_xs == Prelude.map f {- (+1) -} (toList xs)
 
--- {-# ANN prop_bq_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+-- {-# ANN prop_bq_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
 --     #-}
 prop_bq_fold :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_fold = prop_fold
@@ -273,7 +273,7 @@ prop_fold f seq xs =
             where
                 f' x y = assume (f x y == f y x) (f x y)
 
-{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_strict_fold :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_strict_fold = prop_strict_fold
@@ -285,7 +285,7 @@ prop_strict_fold f seq xs =
             &&
             foldl f 0 xs == foldl' f 0 xs
 
-{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_fold1 :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_fold1 = prop_fold1
@@ -298,7 +298,7 @@ prop_fold1 f seq xs =
                 &&
                 foldl1 f xs == Prelude.foldl1 f (toList xs)
 
-{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_strict_fold1 :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_strict_fold1 = prop_strict_fold1
@@ -349,7 +349,7 @@ prop_inBounds_lookup seq i xs =
        &&
        lookupWithDefault 99 i xs == 99)
 
-{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_update_adjust :: (Int -> Int) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_update_adjust = prop_update_adjust
@@ -374,7 +374,7 @@ prop_update_adjust f seq i xs =
         &&
         adjust f i xs === xs
 
-{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_withIndex :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_withIndex = prop_withIndex
@@ -403,7 +403,7 @@ prop_subseq :: SeqTest Int seq => seq Int -> Int -> Int -> seq Int -> Bool
 prop_subseq seq i len xs =
     subseq i len xs === take len (drop i xs)
 
-{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_filter_takeWhile_dropWhile :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_filter_takeWhile_dropWhile = prop_filter_takeWhile_dropWhile
@@ -418,7 +418,7 @@ prop_filter_takeWhile_dropWhile p seq x xs =
             toList (dropWhile p xs) == Prelude.dropWhile p (toList xs)
 --   where p = (< x)
 
-{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_partition_splitWhile :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_partition_splitWhile = prop_partition_splitWhile
@@ -431,7 +431,7 @@ prop_partition_splitWhile p seq x xs =
             splitWhile p xs == (takeWhile p xs, dropWhile p xs)
 --   where p = (< x)
 
-{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_zip_zipWith :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_zip_zipWith = prop_zip_zipWith
@@ -503,7 +503,7 @@ genss seq = sized (\n -> resize (min 20 n) arbitrary)
 
 
 
-{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
     #-}
 prop_bq_concatMap :: (Int -> BQ.Seq Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_concatMap = prop_concatMap

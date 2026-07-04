@@ -476,8 +476,57 @@ prop_strict seq xs =
 prop_show_read :: (SeqTest Int seq) => seq Int -> seq Int -> Bool
 prop_show_read seq xs = xs === read (show xs)
 
--- {-# ANN prop_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
---    #-}
+-- List Seq
+
+{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_map :: (Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_map = prop_map
+
+{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_strict_fold :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_strict_fold = prop_strict_fold
+
+{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_fold1 :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_fold1 = prop_fold1
+
+{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_strict_fold1 :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_strict_fold1 = prop_strict_fold1
+
+{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_update_adjust :: (Int -> Int) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
+prop_ls_update_adjust = prop_update_adjust
+
+{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_withIndex :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_withIndex = prop_withIndex
+
+{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_filter_takeWhile_dropWhile :: (Int -> Bool) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
+prop_ls_filter_takeWhile_dropWhile = prop_filter_takeWhile_dropWhile
+
+{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_partition_splitWhile :: (Int -> Bool) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
+prop_ls_partition_splitWhile = prop_partition_splitWhile
+
+{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_zip_zipWith :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_zip_zipWith = prop_zip_zipWith
+
+{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+prop_ls_concatMap :: (Int -> LS.Seq Int) -> LS.Seq Int -> LS.Seq Int -> Bool
+prop_ls_concatMap = prop_concatMap
 
 -- Bankers Queue
 

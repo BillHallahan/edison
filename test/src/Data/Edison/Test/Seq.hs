@@ -244,8 +244,6 @@ prop_map f seq xs =
                 &&
             toList succ_xs == Prelude.map f {- (+1) -} (toList xs)
 
--- {-# ANN prop_bq_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
---     #-}
 prop_bq_fold :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_fold = prop_fold
 
@@ -478,157 +476,157 @@ prop_show_read seq xs = xs === read (show xs)
 
 -- List Seq
 
-{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_map :: (Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_map = prop_map
 
-{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_strict_fold :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_strict_fold = prop_strict_fold
 
-{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_fold1 :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_fold1 = prop_fold1
 
-{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_strict_fold1 :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_strict_fold1 = prop_strict_fold1
 
-{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_update_adjust :: (Int -> Int) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
 prop_ls_update_adjust = prop_update_adjust
 
-{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_withIndex :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_withIndex = prop_withIndex
 
-{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_filter_takeWhile_dropWhile :: (Int -> Bool) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
 prop_ls_filter_takeWhile_dropWhile = prop_filter_takeWhile_dropWhile
 
-{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_partition_splitWhile :: (Int -> Bool) -> LS.Seq Int -> Int -> LS.Seq Int -> Bool
 prop_ls_partition_splitWhile = prop_partition_splitWhile
 
-{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_zip_zipWith :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_zip_zipWith = prop_zip_zipWith
 
-{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_ls_concatMap :: (Int -> LS.Seq Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_concatMap = prop_concatMap
 
 -- Bankers Queue
 
-{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_map :: (Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_map = prop_map
 
-{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_strict_fold :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_strict_fold = prop_strict_fold
 
-{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_fold1 :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_fold1 = prop_fold1
 
-{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_strict_fold1 :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_strict_fold1 = prop_strict_fold1
 
-{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_update_adjust :: (Int -> Int) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_update_adjust = prop_update_adjust
 
-{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_withIndex :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_withIndex = prop_withIndex
 
-{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_filter_takeWhile_dropWhile :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_filter_takeWhile_dropWhile = prop_filter_takeWhile_dropWhile
 
-{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_partition_splitWhile :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_partition_splitWhile = prop_partition_splitWhile
 
-{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_zip_zipWith :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_zip_zipWith = prop_zip_zipWith
 
-{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_bq_concatMap :: (Int -> BQ.Seq Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_concatMap = prop_concatMap
 
 -- Binary Random Access List
 
-{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_map :: (Int -> Int) -> [Int] -> [Int] -> Bool
 prop_brl_map f xs ys = prop_map f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_strict_fold :: (Int -> Int -> Int) -> [Int] -> [Int] -> Bool
 prop_brl_strict_fold f xs ys = prop_strict_fold f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_fold1 :: (Int -> Int -> Int) -> [Int] -> [Int] -> Bool
 prop_brl_fold1 f xs ys = prop_fold1 f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_strict_fold1 :: (Int -> Int -> Int) -> [Int] -> [Int] -> Bool
 prop_brl_strict_fold1 f xs ys = prop_strict_fold1 f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_update_adjust :: (Int -> Int) -> [Int] -> Int -> [Int] -> Bool
 prop_brl_update_adjust f xs n ys = prop_update_adjust f (fromList xs :: BRL.Seq Int) n (fromList ys)
 
-{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_withIndex :: (Int -> Int -> Int) -> [Int] -> [Int] -> Bool
 prop_brl_withIndex f xs ys = prop_withIndex f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_filter_takeWhile_dropWhile :: (Int -> Bool) -> [Int] -> Int -> [Int] -> Bool
 prop_brl_filter_takeWhile_dropWhile f xs n ys = prop_filter_takeWhile_dropWhile f (fromList xs :: BRL.Seq Int) n (fromList ys)
 
-{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_partition_splitWhile :: (Int -> Bool) -> [Int] -> Int -> [Int] -> Bool
 prop_brl_partition_splitWhile f xs n ys = prop_partition_splitWhile f (fromList xs :: BRL.Seq Int) n (fromList ys)
 
-{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_zip_zipWith :: (Int -> Int -> Int) -> [Int] -> [Int] -> BRL.Seq Int -> Bool
 prop_brl_zip_zipWith f xs ys = prop_zip_zipWith f (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
-    #-}
 prop_brl_concatMap :: (Int -> [Int]) -> [Int] -> [Int] -> Bool
 prop_brl_concatMap f xs ys = prop_concatMap (fromList . f) (fromList xs :: BRL.Seq Int) (fromList ys)
 
+{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}
+{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 720 --higher-order sym-constraints --search height --returns-true --accept-times --sum-height-limit 20 --print-timeout-list-depth --smt cvc5 --states-at-time")
+    #-}

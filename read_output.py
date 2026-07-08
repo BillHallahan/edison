@@ -8,7 +8,7 @@ def process_co_ordinates(pairs):
     return res
 
 
-def read_output(setname):
+def read_output(setname, timeout):
     symbolic = ""
     cons = ""
     coOrd_symbolic_bc = []
@@ -33,7 +33,7 @@ def read_output(setname):
                     sym = False
                     coOrds = re.findall(r"\(([^)]+)\)", line)
                     result = [tuple(map(float, pair.split(','))) for pair in coOrds]
-                    filtered_list = [(float(x), int(y)) for x, y in result if float(x) <= 600]
+                    filtered_list = [(float(x), int(y)) for x, y in result if float(x) <= timeout]
                     (time, height) = filtered_list[-1]
                     if "_sym_constraints" in prop_name:
                         coOrd_cons_bc.append(((prop_name.replace("_sym_constraints", "").replace("_", "\_")), height))
@@ -68,7 +68,7 @@ def read_output(setname):
     return (symbolic, cons, dict)
 
 
-(symbolic_data, func_cons_data, line_graph_data) = read_output("test/lognew/")
+(symbolic_data, func_cons_data, line_graph_data) = read_output("test/logtest/", 150)
 
 print("\nLine graph co-ordinates")
 for key, value in line_graph_data.items():

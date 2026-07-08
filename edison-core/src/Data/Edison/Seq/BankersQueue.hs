@@ -48,7 +48,8 @@ module Data.Edison.Seq.BankersQueue (
     concatMapBuggy,
     zipWithBuggy,
     inBoundsBuggy,
-    mapWithIndexBuggy
+    mapWithIndexBuggy,
+    foldl'Buggy
 ) where
 
 import Prelude hiding (concat,reverse,map,concatMap,foldr,foldl,foldr1,foldl1,foldl',
@@ -405,6 +406,8 @@ mapWithIndexBuggy = mapWithIndexUsingListsBuggy
 
 mapWithIndexUsingListsBuggy :: (Int -> a -> b) -> Seq a -> Seq b
 mapWithIndexUsingListsBuggy f xs = fromList (L.mapWithIndex f (toListBuggy xs))
+
+foldl'Buggy f e (Q _ xs ys _) = revfoldl' f (L.foldl' f e ys) xs
 
 -- instances
 

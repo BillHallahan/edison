@@ -309,6 +309,24 @@ prop_strict_fold f seq xs =
             &&
             foldl f 0 xs == foldl' f 0 xs
 
+{-# ANN prop_bq_strict_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+prop_bq_strict_fold_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
+prop_bq_strict_fold_buggy f seq xs =
+        si xs G2.==>
+            foldr f 0 xs == foldr' f 0 xs
+            &&
+            foldl f 0 xs == BQ.foldl'Buggy f 0 xs
+
+{-# ANN prop_brl_strict_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+prop_brl_strict_fold_buggy :: (Int -> Int -> Int) -> BRL.Seq Int -> BRL.Seq Int -> Bool
+prop_brl_strict_fold_buggy f seq xs =
+        si xs G2.==>
+            foldr f 0 xs == foldr' f 0 xs
+            &&
+            foldl f 0 xs == BRL.foldl'Buggy f 0 xs
+
 prop_fold1 :: SeqTest Int seq => (Int -> Int -> Int) -> seq Int -> seq Int -> Bool
 prop_fold1 f seq xs =
         si xs G2.==>

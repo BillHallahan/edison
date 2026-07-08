@@ -52,7 +52,8 @@ module Data.Edison.Seq.BinaryRandList (
     -- * BUGGY
     dropWhileBuggy,
     zipWithBuggy,
-    mapWithIndexBuggy
+    mapWithIndexBuggy,
+    foldl'Buggy
 ) where
 
 import Prelude hiding (concat,reverse,map,concatMap,foldr,foldl,foldr1,foldl1,foldl',
@@ -435,6 +436,11 @@ mapWithIndexUsingListsBuggy f xs = fromList (mapWithIndexBuggy' f (toList xs))
 mapWithIndexBuggy' f = mapi 0
   where mapi i [] = []
         mapi i (x:xs) = f i x : mapi (pred i) xs
+
+foldl'Buggy         :: (b -> a -> b) -> b -> Seq a -> b
+foldl'Buggy _ e E = e
+foldl'Buggy f e (Even ps)  = foldl'Buggy (\e (x,y) -> f e y) e ps
+foldl'Buggy f e (Odd x ps) = e `seq` foldl'Buggy (\e (x,y) -> e `seq` (\z -> f z y) $! (f e x)) (f e x) ps
 
 -- instances
 

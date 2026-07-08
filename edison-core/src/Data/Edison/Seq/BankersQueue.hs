@@ -41,8 +41,14 @@ module Data.Edison.Seq.BankersQueue (
     structuralInvariant,
 
     -- * Documentation
-    moduleName
+    moduleName,
 
+    -- * BUGGY
+    dropWhileBuggy,
+    concatMapBuggy,
+    zipWithBuggy,
+    inBoundsBuggy,
+    mapWithIndexBuggy
 ) where
 
 import Prelude hiding (concat,reverse,map,concatMap,foldr,foldl,foldr1,foldl1,foldl',
@@ -359,6 +365,46 @@ unzip = unzipUsingLists
 unzip3 = unzip3UsingLists
 unzipWith = unzipWithUsingLists
 unzipWith3 = unzipWith3UsingLists
+
+dropWhileBuggy = dropWhileUsingLviewBuggy
+
+dropWhileUsingLviewBuggy :: (a -> Bool) -> Seq a -> Seq a
+dropWhileUsingLviewBuggy p xs =
+  case lviewBuggy xs of
+    Just (x,xs') | p x -> dropWhileUsingLviewBuggy p xs'
+    _                  -> xs
+
+lviewBuggy          :: (Fail.MonadFail m) => Seq a -> m (a, Seq a)
+lviewBuggy (Q _ [] _ _) = fail "BankersQueue.lview: empty sequence"
+lviewBuggy (Q i (x:xs) ys j) = return (x, makeQ i xs ys j)
+
+concatMapBuggy = concatMapUsingFoldrBuggy
+
+concatMapUsingFoldrBuggy :: (a -> Seq b) -> Seq a -> Seq b
+concatMapUsingFoldrBuggy f = foldr (appendBuggy . f) empty
+
+appendBuggy (Q i1 xs1 ys1 j1) (Q i2 xs2 ys2 j2) =
+    Q (i1 + j1 + i2) (xs1 ++ L.reverseOnto ys1 xs1) ys2 j2
+
+zipWithBuggy :: (a -> b -> c) -> Seq a -> Seq b -> Seq c
+zipWithBuggy = zipWithUsingListsBuggy
+
+zipWithUsingListsBuggy :: (a -> b -> c) -> Seq a -> Seq b -> Seq c
+zipWithUsingListsBuggy f xs ys =
+  fromList (L.zipWith f (toListBuggy xs) (toListBuggy ys))
+toListBuggy (Q _ xs ys j)
+  | j == 0 = xs
+  | otherwise = xs ++ ys
+
+inBoundsBuggy = inBoundsUsingSizeBuggy
+
+inBoundsUsingSizeBuggy :: Int -> Seq a -> Bool
+inBoundsUsingSizeBuggy i s = i >= 0 && i <= size s
+
+mapWithIndexBuggy = mapWithIndexUsingListsBuggy
+
+mapWithIndexUsingListsBuggy :: (Int -> a -> b) -> Seq a -> Seq b
+mapWithIndexUsingListsBuggy f xs = fromList (L.mapWithIndex f (toListBuggy xs))
 
 -- instances
 

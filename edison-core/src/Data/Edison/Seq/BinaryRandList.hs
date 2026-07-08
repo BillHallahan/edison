@@ -47,7 +47,12 @@ module Data.Edison.Seq.BinaryRandList (
     structuralInvariant,
 
     -- * Documentation
-    moduleName
+    moduleName,
+
+    -- * BUGGY
+    dropWhileBuggy,
+    zipWithBuggy,
+    mapWithIndexBuggy
 ) where
 
 import Prelude hiding (concat,reverse,map,concatMap,foldr,foldl,foldr1,foldl1,foldl',
@@ -65,6 +70,8 @@ import Data.Semigroup as SG
 import Control.Monad
 import qualified Control.Monad.Fail as Fail
 import Test.QuickCheck
+
+import qualified Data.Edison.Seq.ListSeq as L
 
 -- signatures for exported functions
 moduleName     :: String
@@ -332,7 +339,6 @@ drop n xs = if n <= 0 then xs else drp n xs
           | odd i = mkEven (drp (half (i-1)) ps)
           | otherwise = fromMaybe empty (ltailM (mkEven (drp (half (i-1)) ps)))
 
-
 strict l@E = l
 strict l@(Even l') = strict l' `seq` l
 strict l@(Odd _ l') = strict l' `seq` l
@@ -379,6 +385,7 @@ takeWhile = takeWhileUsingLview
 dropWhile = dropWhileUsingLview
 splitWhile = splitWhileUsingLview
 
+
 -- for zips, could optimize by calculating which one is shorter and
 -- retaining its shape
 
@@ -390,6 +397,44 @@ unzip = unzipUsingLists
 unzip3 = unzip3UsingLists
 unzipWith = unzipWithUsingLists
 unzipWith3 = unzipWith3UsingLists
+
+dropWhileBuggy = dropWhileUsingLviewBuggy
+
+dropWhileUsingLviewBuggy p xs =
+  case lviewBuggy xs of
+    Just (x,xs') | p x -> dropWhileUsingLviewBuggy p xs'
+    _                  -> xs
+
+lviewBuggy          :: (Fail.MonadFail m) => Seq a -> m (a, Seq a)
+lviewBuggy E = fail "BinaryRandList.lview: empty sequence"
+lviewBuggy (Even ps) = case lviewBuggy ps of
+                    Just ((x,y), ps') -> return (x, Odd y ps')
+                    Nothing -> error "BinaryRandList.lview: bug!"
+lviewBuggy (Odd x ps) = return (x, mkEven ps)
+
+zipWithBuggy = zipWithUsingListsBuggy
+
+zipWithUsingListsBuggy :: (a -> b -> c) -> Seq a -> Seq b -> Seq c
+zipWithUsingListsBuggy f xs ys =
+  fromList (L.zipWith f (toListBuggy xs) (toListBuggy ys))
+
+toListBuggy = toListUsingFoldrBuggy
+
+toListUsingFoldrBuggy :: Seq a -> [a]
+toListUsingFoldrBuggy = foldrBuggy (:) []
+
+foldrBuggy _ e E = e
+foldrBuggy f e (Even ps)  = foldr (\(x,y) e -> f x (f y e)) e ps
+foldrBuggy f e (Odd x ps) = f x (foldr (\(x',y) e -> f x (f y e)) e ps)
+
+mapWithIndexBuggy = mapWithIndexUsingListsBuggy
+
+mapWithIndexUsingListsBuggy :: (Int -> a -> b) -> Seq a -> Seq b
+mapWithIndexUsingListsBuggy f xs = fromList (mapWithIndexBuggy' f (toList xs))
+
+mapWithIndexBuggy' f = mapi 0
+  where mapi i [] = []
+        mapi i (x:xs) = f i x : mapi (pred i) xs
 
 -- instances
 

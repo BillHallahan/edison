@@ -264,7 +264,9 @@ prop_fold f seq xs =
             where
                 f' x y = assume (f x y == f y x) (f x y)
 
-{-# ANN prop_bq_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_fold_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_fold_buggy f seq xs =
@@ -283,7 +285,9 @@ prop_bq_fold_buggy f seq xs =
             where
                 f' x y = f x y
 
-{-# ANN prop_brl_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_fold_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_brl_fold_buggy f seq xs =
@@ -309,7 +313,9 @@ prop_strict_fold f seq xs =
             &&
             foldl f 0 xs == foldl' f 0 xs
 
-{-# ANN prop_bq_strict_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_strict_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_strict_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_strict_fold_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_strict_fold_buggy f seq xs =
@@ -318,7 +324,9 @@ prop_bq_strict_fold_buggy f seq xs =
             &&
             foldl f 0 xs == BQ.foldl'Buggy f 0 xs
 
-{-# ANN prop_brl_strict_fold_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_strict_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_strict_fold_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_strict_fold_buggy :: (Int -> Int -> Int) -> BRL.Seq Int -> BRL.Seq Int -> Bool
 prop_brl_strict_fold_buggy f seq xs =
@@ -401,7 +409,9 @@ prop_update_adjust f seq i xs =
         &&
         adjust f i xs === xs
 
-{-# ANN prop_bq_update_adjust_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_update_adjust_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_update_adjust_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_update_adjust_buggy :: (Int -> Int) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_update_adjust_buggy f seq i xs =
@@ -435,7 +445,9 @@ prop_withIndex h seq xs =
         f i x xs = (i,x):xs
         g xs i x = (i,x):xs
 
-{-# ANN prop_bq_withIndex_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_withIndex_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_withIndex_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_withIndex_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_withIndex_buggy h seq xs =
@@ -449,7 +461,9 @@ prop_bq_withIndex_buggy h seq xs =
         f i x xs = (i,x):xs
         g xs i x = (i,x):xs
 
-{-# ANN prop_brl_withIndex_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_withIndex_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_withIndex_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_withIndex_buggy :: (Int -> Int -> Int) -> BRL.Seq Int -> BRL.Seq Int -> Bool
 prop_brl_withIndex_buggy h seq xs =
@@ -486,7 +500,9 @@ prop_filter_takeWhile_dropWhile p seq x xs =
             toList (dropWhile p xs) == Prelude.dropWhile p (toList xs)
 --   where p = (< x)
 
-{-# ANN prop_bq_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_filter_takeWhile_dropWhile_buggy :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_filter_takeWhile_dropWhile_buggy p seq x xs =
@@ -497,7 +513,9 @@ prop_bq_filter_takeWhile_dropWhile_buggy p seq x xs =
             &&
             toList (BQ.dropWhileBuggy p xs) == Prelude.dropWhile p (toList xs)
 
-{-# ANN prop_brl_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_filter_takeWhile_dropWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_filter_takeWhile_dropWhile_buggy :: (Int -> Bool) -> BRL.Seq Int -> Int -> BRL.Seq Int -> Bool
 prop_brl_filter_takeWhile_dropWhile_buggy p seq x xs =
@@ -516,7 +534,9 @@ prop_partition_splitWhile p seq x xs =
             splitWhile p xs == (takeWhile p xs, dropWhile p xs)
 --   where p = (< x)
 
-{-# ANN prop_bq_partition_splitWhile_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_partition_splitWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_partition_splitWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_partition_splitWhile_buggy :: (Int -> Bool) -> BQ.Seq Int -> Int -> BQ.Seq Int -> Bool
 prop_bq_partition_splitWhile_buggy p seq x xs =
@@ -525,7 +545,9 @@ prop_bq_partition_splitWhile_buggy p seq x xs =
             &&
             splitWhile p xs == (takeWhile p xs, BQ.dropWhileBuggy p xs)
 
-{-# ANN prop_brl_partition_splitWhile_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_partition_splitWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_partition_splitWhile_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_partition_splitWhile_buggy :: (Int -> Bool) -> BRL.Seq Int -> Int -> BRL.Seq Int -> Bool
 prop_brl_partition_splitWhile_buggy p seq x xs =
@@ -542,7 +564,9 @@ prop_zip_zipWith f seq xs ys =
         toList (zipWith f xs ys) == xys
   where xys = Prelude.zipWith f (toList xs) (toList ys)
 
-{-# ANN prop_bq_zip_zipWith_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_zip_zipWith_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_zip_zipWith_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_zip_zipWith_buggy :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_zip_zipWith_buggy f seq xs ys =
@@ -552,7 +576,9 @@ prop_bq_zip_zipWith_buggy f seq xs ys =
         toList (BQ.zipWithBuggy f xs ys) == xys
   where xys = Prelude.zipWith f (toList xs) (toList ys)
 
-{-# ANN prop_brl_zip_zipWith_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_brl_zip_zipWith_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_brl_zip_zipWith_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_brl_zip_zipWith_buggy :: (Int -> Int -> Int) -> BRL.Seq Int -> BRL.Seq Int -> BRL.Seq Int -> Bool
 prop_brl_zip_zipWith_buggy f seq xs ys =
@@ -630,7 +656,9 @@ prop_concatMap f seq xs =
 --   where check xss = concatMap f xs === concat (map f xs)
 --             where f i = lookupWithDefault empty i xss
 
-{-# ANN prop_bq_concatMap_buggy (SymExWithConfig "--no-step-limit --time 120 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+{-# ANN prop_bq_concatMap_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order symbolic --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
+    #-}
+{-# ANN prop_bq_concatMap_buggy (SymExWithConfig "--max-outputs 1 --no-step-limit --time 300 --higher-order sym-constraints --search subpath --subpath-len 8 --returns-true --accept-times --print-timeout-list-depth --smt cvc5")
     #-}
 prop_bq_concatMap_buggy :: (Int -> BQ.Seq Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_concatMap_buggy f seq xs =

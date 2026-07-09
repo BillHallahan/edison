@@ -2,3 +2,5 @@
 **/.stack-work
 **/dist
 **/cabal.sandbox.config
+dist-newstyle/
+*.mix

@@ -16,21 +16,18 @@ def read_output(setname):
 
     current_dir = os.getcwd()
 
-    setpath = os.path.join(current_dir, setname)
-    print(setpath)
-    all_files = os.listdir(setpath);
+    file_path = os.path.join(current_dir, setname)
+    print(file_path)
 
-    for filename in all_files:
-        file_path = os.path.join(setpath, filename)
-        if os.path.isfile(file_path):
-            with open(file_path, 'r') as file:
-                for line in file:
-                    if ":" in line:
-                        prop, value = line.split(":", 1)
-                        time_str = value.strip().strip(",")
-                        time = float(time_str.strip()) if time_str else -0.0
-                        prop_n = prop.strip()
-                        dict[prop_n] = time
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as file:
+            for line in file:
+                if ":" in line:
+                    prop, value = line.split(":", 1)
+                    time_str = value.strip().strip(",")
+                    time = float(time_str.strip()) if time_str else -0.0
+                    prop_n = prop.strip()
+                    dict[prop_n] = time
 
     for key, value in dict.items():
         prop = key.replace("_symbolic", "").replace("_sym_constraints", "").replace("_", "\_")
@@ -43,7 +40,7 @@ def read_output(setname):
     return (symbolic, cons)
 
 
-(symbolic_data, func_cons_data) = read_output("test/time_logs/")
+(symbolic_data, func_cons_data) = read_output("test/time_logs/state_accept_log.txt")
 
 print("\nFunc Constraints co-ordinates for counter-example")
 print(func_cons_data)

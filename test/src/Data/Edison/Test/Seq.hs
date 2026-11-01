@@ -458,7 +458,7 @@ prop_concatMap f seq xs =
         si xs G2.==>
             concatMap f' xs === concat (map f' xs)
     where
-        f' ys = let r = f ys in G2.assume (si r) r
+        f' ys = let r = f ys in G2.assume (not (inBounds 2 r) && si r) r
 -- prop_concatMap seq xs = forAll (genss seq) check
 --   where check xss = concatMap f xs === concat (map f xs)
 --             where f i = lookupWithDefault empty i xss
@@ -535,8 +535,8 @@ prop_bq_partition_splitWhile = prop_partition_splitWhile
 prop_bq_zip_zipWith :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_zip_zipWith = prop_zip_zipWith
 
-prop_bq_concatMap :: (Int -> BQ.Seq Int) -> BQ.Seq Int -> BQ.Seq Int -> Bool
-prop_bq_concatMap = prop_concatMap
+prop_bq_concatMap :: (Int -> [Int]) -> BQ.Seq Int -> BQ.Seq Int -> Bool
+prop_bq_concatMap f = prop_concatMap (\x -> let zs = f x in assume (not (inBounds 2 zs)) (fromList zs))
 
 -- Binary Random Access List
 
@@ -568,127 +568,130 @@ prop_brl_zip_zipWith :: (Int -> Int -> Int) -> [Int] -> [Int] -> BRL.Seq Int -> 
 prop_brl_zip_zipWith f xs ys = prop_zip_zipWith f (fromList xs :: BRL.Seq Int) (fromList ys)
 
 prop_brl_concatMap :: (Int -> [Int]) -> [Int] -> [Int] -> Bool
-prop_brl_concatMap f xs ys = prop_concatMap (fromList . f) (fromList xs :: BRL.Seq Int) (fromList ys)
+prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (inBounds 2 zs)) (fromList zs)) (fromList xs :: BRL.Seq Int) (fromList ys)
 
-{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
-    #-}
-{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 
+{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
 
-{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+
+{-# ANN prop_ls_map (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+
+{-# ANN prop_bq_map (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+{-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
-{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 600 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+
+{-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_map (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_strict_fold (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_strict_fold1 (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_update_adjust (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_withIndex (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}

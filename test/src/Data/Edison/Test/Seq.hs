@@ -406,18 +406,20 @@ prop_zip3_zipWith3 seq xs ys zs =
 
 
 prop_unzip_unzipWith :: (SeqTest Int seq,SeqTest (Int,Int) seq) =>
+        ((Int, Int) -> Int) ->
+        ((Int, Int) -> Int) ->
         seq Int -> seq (Int,Int) -> Bool
 
-prop_unzip_unzipWith seq xys =
+prop_unzip_unzipWith f g seq xys =
     si xs
     &&
     si ys
+    -- &&
+    -- unzip xys == (xs, ys)
     &&
-    unzip xys == (xs, ys)
-    &&
-    unzipWith fst snd xys == (xs, ys)
-  where xs = map fst xys
-        ys = map snd xys
+    unzipWith f g xys == (xs, ys)
+  where xs = map f xys
+        ys = map g xys
 
 
 prop_unzip3_unzipWith3 :: (SeqTest Int seq,SeqTest (Int,Int,Int) seq) =>
@@ -503,6 +505,9 @@ prop_ls_partition_splitWhile = prop_partition_splitWhile
 prop_ls_zip_zipWith :: (Int -> Int -> Int) -> LS.Seq Int -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_zip_zipWith = prop_zip_zipWith
 
+prop_ls_unzip_unzipWith :: ((Int, Int) -> Int) -> ((Int, Int) -> Int) -> LS.Seq Int -> LS.Seq (Int,Int) -> Bool
+prop_ls_unzip_unzipWith = prop_unzip_unzipWith
+
 prop_ls_concatMap :: (Int -> LS.Seq Int) -> LS.Seq Int -> LS.Seq Int -> Bool
 prop_ls_concatMap = prop_concatMap
 
@@ -534,6 +539,9 @@ prop_bq_partition_splitWhile = prop_partition_splitWhile
 
 prop_bq_zip_zipWith :: (Int -> Int -> Int) -> BQ.Seq Int -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_zip_zipWith = prop_zip_zipWith
+
+prop_bq_unzip_unzipWith :: ((Int, Int) -> Int) -> ((Int, Int) -> Int) -> BQ.Seq Int -> BQ.Seq (Int,Int) -> Bool
+prop_bq_unzip_unzipWith = prop_unzip_unzipWith
 
 prop_bq_concatMap :: (Int -> [Int]) -> BQ.Seq Int -> BQ.Seq Int -> Bool
 prop_bq_concatMap f = prop_concatMap (\x -> let zs = f x in assume (not (inBounds 2 zs)) (fromList zs))
@@ -567,6 +575,9 @@ prop_brl_partition_splitWhile f xs n ys = prop_partition_splitWhile f (fromList 
 prop_brl_zip_zipWith :: (Int -> Int -> Int) -> [Int] -> [Int] -> BRL.Seq Int -> Bool
 prop_brl_zip_zipWith f xs ys = prop_zip_zipWith f (fromList xs :: BRL.Seq Int) (fromList ys)
 
+prop_brl_unzip_unzipWith :: ((Int, Int) -> Int) -> ((Int, Int) -> Int) -> [Int] -> [(Int,Int)] -> Bool
+prop_brl_unzip_unzipWith f g xs ys = prop_unzip_unzipWith f g (fromList xs :: BRL.Seq Int) (fromList ys)
+
 prop_brl_concatMap :: (Int -> [Int]) -> [Int] -> [Int] -> Bool
 prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (inBounds 2 zs)) (fromList zs)) (fromList xs :: BRL.Seq Int) (fromList ys)
 
@@ -587,6 +598,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
 {-# ANN prop_ls_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_ls_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
@@ -609,6 +622,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
     #-}
 {-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
+{-# ANN prop_bq_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
 {-# ANN prop_bq_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 
@@ -629,6 +644,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
 {-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order sym-constraints --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
@@ -651,6 +668,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
     #-}
 {-# ANN prop_ls_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
+{-# ANN prop_ls_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
 {-# ANN prop_ls_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 
@@ -669,6 +688,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
 {-# ANN prop_bq_filter_takeWhile_dropWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_bq_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_bq_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_bq_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
@@ -692,6 +713,8 @@ prop_brl_concatMap f xs ys = prop_concatMap (\x -> let zs = f x in assume (not (
 {-# ANN prop_brl_partition_splitWhile (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_brl_zip_zipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
+    #-}
+{-# ANN prop_brl_unzip_unzipWith (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}
 {-# ANN prop_brl_concatMap (SymExWithConfig "--no-step-limit --time 300 --higher-order symbolic --search height --returns-true --accept-times --print-timeout-list-depth --smt cvc5 --states-at-time --print-up-to-height")
     #-}

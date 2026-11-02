@@ -50,10 +50,13 @@ module Data.Edison.Seq.BinaryRandList (
     moduleName,
 
     -- * BUGGY
+    mapBuggy,
     dropWhileBuggy,
     zipWithBuggy,
     mapWithIndexBuggy,
-    foldl'Buggy
+    foldl'Buggy,
+    inBoundsBuggy,
+    concatMapBuggy
 ) where
 
 import Prelude hiding (concat,reverse,map,concatMap,foldr,foldl,foldr1,foldl1,foldl',
@@ -238,6 +241,11 @@ map _ E = E
 map f (Even ps)  = Even (map (\(x,y) -> (f x,f y)) ps)
 map f (Odd x ps) = Odd (f x) (map (\(y,z) -> (f y,f z)) ps)
 
+mapBuggy            :: (a -> b) -> Seq a -> Seq b
+mapBuggy _ E = E
+mapBuggy f (Even ps)  = Even (mapBuggy (\(x,y) -> (f y,f x)) ps)
+mapBuggy f (Odd x ps) = Odd (f x) (mapBuggy (\(y,z) -> (f y,f z)) ps)
+
 fold   = foldr
 fold'  = foldr'
 fold1  = fold1UsingFold
@@ -275,6 +283,12 @@ inBounds i xs = (i >= 0) && inb xs i
         inb E _ = False
         inb (Even ps) i = inb ps (half i)
         inb (Odd _ ps) i = (i == 0) || inb ps (half (i-1))
+
+inBoundsBuggy i xs = (i >= 0) && inb xs i
+  where inb :: Seq a -> Int -> Bool
+        inb E _ = False
+        inb (Even ps) i = inb ps (half i)
+        inb (Odd _ ps) i = (i == 0) || inb ps (half i)
 
 lookup i xs = runFail_ (lookupM i xs)
 
@@ -385,6 +399,12 @@ subseq = subseqDefault
 takeWhile = takeWhileUsingLview
 dropWhile = dropWhileUsingLview
 splitWhile = splitWhileUsingLview
+
+concatMapBuggy :: (a -> Seq a) -> Seq a -> Seq a
+concatMapBuggy = concatMapUsingFoldrBuggy
+
+concatMapUsingFoldrBuggy :: (a -> Seq a) -> Seq a -> Seq a
+concatMapUsingFoldrBuggy f = foldl (\ys x -> append (f x) ys) empty
 
 
 -- for zips, could optimize by calculating which one is shorter and

@@ -44,6 +44,7 @@ module Data.Edison.Seq.BankersQueue (
     moduleName,
 
     -- * BUGGY
+    mapBuggy,
     dropWhileBuggy,
     concatMapBuggy,
     zipWithBuggy,
@@ -221,6 +222,8 @@ toList (Q _ xs ys j)
   | otherwise = xs ++ L.reverse ys
 
 map f (Q i xs ys j) = Q i (L.map f xs) (L.map f ys) j
+
+mapBuggy f (Q i xs ys j) = Q j (L.map f ys) (L.map f xs) i
 
 -- local fn on lists
 revfoldr :: (t -> t1 -> t1) -> t1 -> [t] -> t1

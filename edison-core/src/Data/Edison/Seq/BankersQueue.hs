@@ -410,7 +410,7 @@ mapWithIndexBuggy = mapWithIndexUsingListsBuggy
 mapWithIndexUsingListsBuggy :: (Int -> a -> b) -> Seq a -> Seq b
 mapWithIndexUsingListsBuggy f xs = fromList (L.mapWithIndex f (toListBuggy xs))
 
-foldl'Buggy f e (Q _ xs ys _) = revfoldl' f (L.foldl' f e xs) ys
+foldl'Buggy f e (Q _ xs ys _) = revfoldl' f (L.foldl' f e ys) xs
 
 -- instances
 

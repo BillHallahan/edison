@@ -411,6 +411,7 @@ prop_unzip_unzipWith :: (SeqTest Int seq,SeqTest (Int,Int) seq) =>
         seq Int -> seq (Int,Int) -> Bool
 
 prop_unzip_unzipWith f g seq xys =
+    si xys G2.==>
     si xs
     &&
     si ys

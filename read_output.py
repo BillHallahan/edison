@@ -68,7 +68,7 @@ def read_output(setname, timeout):
     return (symbolic, cons, dict)
 
 
-(symbolic_data, func_cons_data, line_graph_data) = read_output("test/logtest/", 150)
+(symbolic_data, func_cons_data, line_graph_data) = read_output("test/logs/time_logs/", 300)
 
 print("\nLine graph co-ordinates")
 for key, value in line_graph_data.items():

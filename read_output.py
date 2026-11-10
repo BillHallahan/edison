@@ -15,6 +15,8 @@ def read_output(setname, timeout):
     coOrd_cons_bc = []
 
     dict = {}
+    res_sym_constraints = {}
+    res_symbolic = {}
 
     current_dir = os.getcwd()
 
@@ -35,15 +37,18 @@ def read_output(setname, timeout):
                     result = [tuple(map(float, pair.split(','))) for pair in coOrds]
                     filtered_list = [(float(x), int(y)) for x, y in result if float(x) <= timeout]
                     (time, height) = filtered_list[-1]
+                    
+                    property = prop_name.replace("_symbolic", "").replace("_sym_constraints", "")
+
                     if "_sym_constraints" in prop_name:
                         coOrd_cons_bc.append(((prop_name.replace("_sym_constraints", "").replace("_", "\_")), height))
+                        res_sym_constraints[property] = (time, height)
                     else:
                         coOrd_symbolic_bc.append(((prop_name.replace("_symbolic", "").replace("_", "\_")), height))
                         sym = True
+                        res_symbolic[property] = (time, height)
                         
                     # dict[prop_name] = "\\addplot[color=blue,mark=square,] coordinates { " + process_co_ordinates(filtered_list) + " };"
-
-                    property = prop_name.replace("_symbolic", "").replace("_sym_constraints", "")
 
                     if property in dict:
                         (temp, isSym) = dict[property]
@@ -65,10 +70,10 @@ def read_output(setname, timeout):
     for (prop, height) in coOrd_cons_bc:
         cons += "(" + prop + ", " + str(height) + ")"
 
-    return (symbolic, cons, dict)
+    return (symbolic, cons, dict, res_sym_constraints, res_symbolic)
 
 
-(symbolic_data, func_cons_data, line_graph_data) = read_output("test/logs/time_logs/", 300)
+(symbolic_data, func_cons_data, line_graph_data, res_sym_constraints, res_symbolic) = read_output("test/logs/time_logs/", 300)
 
 print("\nLine graph co-ordinates")
 for key, value in line_graph_data.items():
@@ -76,6 +81,17 @@ for key, value in line_graph_data.items():
     print(key + ":")
     print(plot + "\n")
 
+# output number at least doubled
+at_least_doubled = 0
+for prop in res_sym_constraints:
+    (_, h_sc) = res_sym_constraints[prop]
+    (_, h_unroll) = res_symbolic[prop]
+    if h_sc >= h_unroll * 2:
+        at_least_doubled += 1
+
+print("Number of times height at least doubled: " + str(at_least_doubled))    
+
+# output coordinates for bar charts
 print("\n Func Constraints co-ordinates")
 print(func_cons_data)
 

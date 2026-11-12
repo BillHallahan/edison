@@ -7,6 +7,44 @@ def process_co_ordinates(pairs):
         res += "(" + str(time) + ", " + str(height) + ")"
     return res
 
+def read_state_counts(setname, timeout):
+    res_sym_constraints = {}
+    res_unrolling = {}
+
+    current_dir = os.getcwd()
+
+    setpath = os.path.join(current_dir, setname)
+    print(setpath)
+    all_files = os.listdir(setpath);
+
+    for filename in all_files:
+        # print(filename)
+        prop_name = filename.replace(".txt", "")
+        # print(prop_name)
+        file_path = os.path.join(setpath, filename)
+        if os.path.isfile(file_path):
+            with open(file_path, 'r') as file:
+                for line in file:
+                    sym = False
+                    coOrds = re.findall(r"\(([^)]+)\)", line)
+                    result = [tuple(map(int, pair.split(','))) for pair in coOrds]
+                    result = result[:-1]
+                    
+                    prop = prop_name.replace("_symbolic", "").replace("_sym_constraints", "")
+                    if "_sym_constraints" in prop_name:
+                        res_sym_constraints[prop] = result
+                    else:
+                        res_unrolling[prop] = result
+    return (res_sym_constraints, res_unrolling)
+
+def average_state_count_increase(state_counts_size):
+    (state_counts, _) = map(list, zip(*state_counts_size))
+    total = 0
+    pairs = list(zip(state_counts, state_counts[1:]))
+    for (x, y) in pairs:
+        total += float(y) / float(x)
+    avg = (float(total) / float(len(list(pairs))))
+    return avg
 
 def read_output(setname, timeout):
     symbolic = ""
@@ -24,7 +62,7 @@ def read_output(setname, timeout):
     print(setpath)
     all_files = os.listdir(setpath);
 
-    for filename in all_files:
+    for filename in sorted(all_files):
         # print(filename)
         prop_name = filename.replace(".txt", "")
         # print(prop_name)
@@ -98,3 +136,14 @@ print(func_cons_data)
 print("\nSymbolic co-ordinates")
 print(symbolic_data)
 
+print("State Count Avg Increase")
+(sc_sym_constraints_dict, sc_unrolling_dict) = read_state_counts("test/logs/sc_logs/", 300)
+
+for prop in sc_sym_constraints_dict:
+    sc_sym_cons = sc_sym_constraints_dict[prop]
+    sc_unrolling = sc_unrolling_dict[prop]
+
+    sc_incr_sym_cons = average_state_count_increase(sc_sym_cons)
+    sc_incr_unrolling = average_state_count_increase(sc_unrolling)
+
+    print("Prop-" + prop + "Sym Constraint: " + str(sc_incr_sym_cons) + " Unrolling: " + str(sc_incr_unrolling))

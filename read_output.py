@@ -139,6 +139,9 @@ print(symbolic_data)
 print("State Count Avg Increase")
 (sc_sym_constraints_dict, sc_unrolling_dict) = read_state_counts("test/logs/sc_logs/", 300)
 
+
+total_scm_sym_constraints = 0
+total_scm_unrolling = 0
 for prop in sc_sym_constraints_dict:
     sc_sym_cons = sc_sym_constraints_dict[prop]
     sc_unrolling = sc_unrolling_dict[prop]
@@ -146,4 +149,10 @@ for prop in sc_sym_constraints_dict:
     sc_incr_sym_cons = average_state_count_increase(sc_sym_cons)
     sc_incr_unrolling = average_state_count_increase(sc_unrolling)
 
-    print("Prop-" + prop + "Sym Constraint: " + str(sc_incr_sym_cons) + " Unrolling: " + str(sc_incr_unrolling))
+    total_scm_sym_constraints += sc_incr_sym_cons
+    total_scm_unrolling += sc_incr_unrolling
+
+    print("Prop: " + prop + " Sym Constraint: " + str(sc_incr_sym_cons) + " Unrolling: " + str(sc_incr_unrolling))
+
+print("Avg. State Count Sym Constraints: " + str(total_scm_sym_constraints / len(sc_sym_constraints_dict)))
+print("Avg. State Count Unrolling: " + str(total_scm_unrolling / len(sc_sym_constraints_dict)))
